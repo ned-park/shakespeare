@@ -19,7 +19,7 @@
   <ul>
     <% for (let quote of quotes) { %>
       <li>
-        <span><%=quote.act %>:<%=quote.scene%> by <%= quote.character %></span>
+        <h3><%=quote.title %>:<%=quote.act %>:<%=quote.scene%> by <%= quote.character %></h3>
         <p><%-quote.line%></p>
       </li>
     <% }%>

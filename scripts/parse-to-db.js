@@ -110,26 +110,26 @@ parsePlays(directory)
   })
   .then(d => {
     console.log(d)
-    process.exit(0)
+    parseVerse(verse)
+    .then(async lines => {
+      const client = new MongoClient(process.env.MONGODB_URL)
+      await client.connect()
+  
+      console.log(`parsed ${lines.length} lines`)
+      const collection = client.db('quotes').collection('quotes')
+      await collection.insertMany(lines)
+      return collection.createIndex({line: 'text'})
+    })
+    .then(d => {
+      console.log(d)
+      process.exit(0)
+    })
+    .catch(e => console.error(e))
   })
   .catch(e => console.error(e))
 
 
-  parseVerse(verse)
-  .then(async lines => {
-    const client = new MongoClient(process.env.MONGODB_URL)
-    await client.connect()
 
-    console.log(`parsed ${lines.length} lines`)
-    const collection = client.db('quotes').collection('quotes')
-    await collection.insertMany(lines)
-    return collection.createIndex({line: 'text'})
-  })
-  .then(d => {
-    console.log(d)
-    process.exit(0)
-  })
-  .catch(e => console.error(e))
 
 
 
