@@ -25,10 +25,10 @@ Automating data cleaning to prevent parsing problems.
 
 ## Examples:
 
-###Search: 
+### Search: 
 nobler
 
-###Returns:
+### Returns:
 
 ## THE TRAGEDY OF HAMLET, PRINCE OF DENMARK:ACT III:SCENE I. A room in the Castle. by HAMLET
 To be, or not to be, that is the question: Whether 'tis nobler
