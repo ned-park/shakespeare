@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Shakespearean Quote Finder</title>
+</head>
+<body>
+  <h1>Search for quotes in Shakepeare's works</h1>
+  <h2>Currently supports Hamlet, more coming soon</h2>
+
+  <form action="/api">
+    <label for="searchTextInput">Search</label>
+    <input type="text" id="searchTextInput" name="searchText" placeholder="Enter a word, or quote here" required>
+    <button>Submit</button>
+  </form>
+  <ul>
+    <% for (let quote of quotes) { %>
+      <li>
+        <span><%=quote.act %>:<%=quote.scene%> by <%= quote.character %></span>
+        <p><%-quote.line%></p>
+      </li>
+    <% }%>
+  </ul>
+</body>
+</html>

@@ -35,7 +35,8 @@ async function parsePlays(directory) {
         }
         lines.push(entry)
       } else { 
-        [personae, line] = text.split(/[.]{1}[ ]{1}/)
+        [personae, ...line] = text.split(/[.]{1}[ ]{1}/)
+        line = line.join('. ').replace(/[\n]/g, '<br />')
         const entry = {
           author,
           title,
@@ -66,7 +67,7 @@ parsePlays(directory)
     const collection = client.db('quotes').collection('quotes')
     await collection.drop()
     await collection.insertMany(lines)
-    return collection.createIndex({text: 'text'})
+    return collection.createIndex({line: 'text'})
   })
   .then(d => {
     console.log(d)
