@@ -9,6 +9,7 @@ async function parsePlays(directory) {
   const absPath = path.resolve(directory)
   for (const filename of await fs.promises.readdir(absPath)) {
     const file = path.join(absPath, filename)
+    console.log(`Parsing ${file}`)
     const contents = (await fs.promises.readFile(file)).toString()
     
     let play = contents.split('\n\n')
@@ -58,7 +59,7 @@ async function parseVerse(verse) {
   const absPath = path.resolve(verse)
   for (const filename of await fs.promises.readdir(absPath)) {
     const file = path.join(absPath, filename)
-    console.log(file)
+    console.log(`Parsing ${file}`)
     const contents = (await fs.promises.readFile(file)).toString()
     
     let poem = contents.split('\n\n')
@@ -73,7 +74,6 @@ async function parseVerse(verse) {
       } else if (/^[ ]*[XIV]+\./.test(text)) {
         act = text
       } else if (/^[ ]*\d+/.test(text)) {
-        console.log(text)
         act = text.replace(/ /g, '')
       } else {
         const entry = {
@@ -83,9 +83,6 @@ async function parseVerse(verse) {
           scene,
           'line': text.replace(/[\n]/g, '<br />'),
           character: 'William Shakespeare'
-        }
-        if (title == "VENUS AND ADONIS"){
-          console.log(entry)
         }
         lines.push(entry)
       } 
@@ -100,22 +97,22 @@ if (!directory||!verse) {
 	process.exit(1);
 }
 
-// parsePlays(directory)
-//   .then(async lines => {
-//     const client = new MongoClient(process.env.MONGODB_URL)
-//     await client.connect()
+parsePlays(directory)
+  .then(async lines => {
+    const client = new MongoClient(process.env.MONGODB_URL)
+    await client.connect()
 
-//     console.log(`parsed ${lines.length} lines`)
-//     const collection = client.db('quotes').collection('quotes')
-//     await collection.drop()
-//     await collection.insertMany(lines)
-//     return collection.createIndex({line: 'text'})
-//   })
-//   .then(d => {
-//     console.log(d)
-//     process.exit(0)
-//   })
-//   .catch(e => console.error(e))
+    console.log(`parsed ${lines.length} lines`)
+    const collection = client.db('quotes').collection('quotes')
+    await collection.drop()
+    await collection.insertMany(lines)
+    return collection.createIndex({line: 'text'})
+  })
+  .then(d => {
+    console.log(d)
+    process.exit(0)
+  })
+  .catch(e => console.error(e))
 
 
   parseVerse(verse)
@@ -124,11 +121,9 @@ if (!directory||!verse) {
     await client.connect()
 
     console.log(`parsed ${lines.length} lines`)
-    // console.log(lines)
-    //const collection = client.db('quotes').collection('quotes')
-    //await collection.drop()
-    //await collection.insertMany(lines)
-    //return collection.createIndex({line: 'text'})
+    const collection = client.db('quotes').collection('quotes')
+    await collection.insertMany(lines)
+    return collection.createIndex({line: 'text'})
   })
   .then(d => {
     console.log(d)
