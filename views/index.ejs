@@ -20,7 +20,7 @@
     <% for (let quote of quotes) { %>
       <li>
         <h3><%=quote.title === "THE SONNETS"? quote.title +' '+quote.act : quote.title%></h3>
-        <h4><%=quote.act %>:<%=quote.scene%><h4> 
+        <h4><%=quote.title === "THE SONNETS"? '': quote.act %> <%=quote.scene%><h4> 
         <h4>By <%= quote.character %></h4>
         <p><%-quote.line%></p>
       </li>
