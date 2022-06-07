@@ -30,7 +30,7 @@ nobler
 
 ###Returns:
 
-HAMLET: ACT III:SCENE I. A room in the Castle. by HAMLET
+## THE TRAGEDY OF HAMLET, PRINCE OF DENMARK:ACT III:SCENE I. A room in the Castle. by HAMLET
 To be, or not to be, that is the question: Whether 'tis nobler
 in the mind to suffer The slings and arrows of outrageous fortune, Or
 to take arms against a sea of troubles, And by opposing end them? To
@@ -54,7 +54,7 @@ enterprises of great pith and moment, With this regard their currents
 turn awry And lose the name of action. Soft you now, The fair Ophelia!
 Nymph, in thy orisons Be all my sins remember'd.
 
-Sonnet 151: by William Shakespeare
+## THE SONNETS:151: by William Shakespeare
 Love is too young to know what conscience is,
 Yet who knows not conscience is born of love?
 Then gentle cheater urge not my amiss,
