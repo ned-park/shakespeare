@@ -52,22 +52,83 @@ async function parsePlays(directory) {
   return lines
 }
 
-const [_, __, directory] = process.argv;
-if (!directory) {
+async function parseVerse(verse) {
+  const lines = []
+
+  const absPath = path.resolve(verse)
+  for (const filename of await fs.promises.readdir(absPath)) {
+    const file = path.join(absPath, filename)
+    console.log(file)
+    const contents = (await fs.promises.readFile(file)).toString()
+    
+    let poem = contents.split('\n\n')
+    let title = poem.shift().replace(/___/g, '')
+    let author = poem.shift()
+    let act = ''
+    let scene = ''
+    poem.forEach(text => {
+      let personae = ''
+      let line = ''
+      if (text.length == 0) {
+      } else if (/^[ ]*[XIV]+\./.test(text)) {
+        act = text
+      } else if (/^[ ]*\d+/.test(text)) {
+        console.log(text)
+        act = text.replace(/ /g, '')
+      } else {
+        const entry = {
+          author,
+          title,
+          act,
+          scene,
+          'line': text.replace(/[\n]/g, '<br />'),
+          character: 'William Shakespeare'
+        }
+        if (title == "VENUS AND ADONIS"){
+          console.log(entry)
+        }
+        lines.push(entry)
+      } 
+    })
+  }
+  return lines
+}
+
+const [_, __, directory, verse] = process.argv;
+if (!directory||!verse) {
 	console.error('A directory is required');
 	process.exit(1);
 }
 
-parsePlays(directory)
+// parsePlays(directory)
+//   .then(async lines => {
+//     const client = new MongoClient(process.env.MONGODB_URL)
+//     await client.connect()
+
+//     console.log(`parsed ${lines.length} lines`)
+//     const collection = client.db('quotes').collection('quotes')
+//     await collection.drop()
+//     await collection.insertMany(lines)
+//     return collection.createIndex({line: 'text'})
+//   })
+//   .then(d => {
+//     console.log(d)
+//     process.exit(0)
+//   })
+//   .catch(e => console.error(e))
+
+
+  parseVerse(verse)
   .then(async lines => {
     const client = new MongoClient(process.env.MONGODB_URL)
     await client.connect()
 
     console.log(`parsed ${lines.length} lines`)
-    const collection = client.db('quotes').collection('quotes')
-    await collection.drop()
-    await collection.insertMany(lines)
-    return collection.createIndex({line: 'text'})
+    // console.log(lines)
+    //const collection = client.db('quotes').collection('quotes')
+    //await collection.drop()
+    //await collection.insertMany(lines)
+    //return collection.createIndex({line: 'text'})
   })
   .then(d => {
     console.log(d)
@@ -75,3 +136,6 @@ parsePlays(directory)
   })
   .catch(e => console.error(e))
 
+
+
+  
