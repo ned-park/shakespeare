@@ -13,19 +13,35 @@ async function parsePlays(directory) {
     const contents = (await fs.promises.readFile(file)).toString()
     
     let play = contents.split('\n\n')
-    let title = play.shift()
-    let author = play.shift().replace(/by[ ]*/, '')
+    let title = ''
+    let author = 'William Shakespeare'
     let act = ''
     let scene = ''
     play.forEach(text => {
       let personae = ''
       let line = ''
       if (text.length == 0) {
-      } else if (/^ACT/.test(text)) {
+      } else if (/___/.test(text)) {
+        title = text.replace(/___/g, '')
+      } else if (/^[ ]*ACT/.test(text)) {
         act = text
-      } else if (/^SCENE/.test(text)) {
+      } else if (/^[ ]*SCENE/.test(text)) {
         scene = text
-      } else if (/^[ ]/.test(text)){
+      } else if (/^[A-Z]+\./.test(text)) {
+        let [personae, ...line] = text.split(/[.]{1}([ ]|\n){1}/)
+        personae = personae.replace(/^[ ]/g, '')
+        line = line.join('. ').replace(/[\n]/g, '<br />')
+        line = line.replace(/[ ][.][ ]/g, '')
+        const entry = {
+          author,
+          title,
+          act,
+          scene,
+          line,
+          'character': personae,
+        }
+        lines.push(entry)
+      }else if (/^[ ]*\[_/.test(text)){
         const entry = {
           author,
           title,
@@ -36,17 +52,7 @@ async function parsePlays(directory) {
         }
         lines.push(entry)
       } else { 
-        [personae, ...line] = text.split(/[.]{1}[ ]{1}/)
-        line = line.join('. ').replace(/[\n]/g, '<br />')
-        const entry = {
-          author,
-          title,
-          act,
-          scene,
-          line,
-          'character': personae,
-        }
-        lines.push(entry)
+        
       }
     })
   }
@@ -119,7 +125,7 @@ parsePlays(directory)
       const collection = client.db('quotes').collection('quotes')
       await collection.insertMany(lines)
       return collection.createIndex({line: 'text'})
-    })
+     })
     .then(d => {
       console.log(d)
       process.exit(0)
