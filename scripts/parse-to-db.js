@@ -30,8 +30,13 @@ async function parsePlays(directory) {
       } else if (/^[A-Z]+\./.test(text)) {
         let [personae, ...line] = text.split(/[.]{1}([ ]|\n){1}/)
         personae = personae.replace(/^[ ]/g, '')
-        line = line.join('. ').replace(/[\n]/g, '<br />')
+        line = line.map(l => l.replace(/^\n/, ''))
+        line = line.join('. ')
+        line = line.replace(/(\n|[ ])[.](\n|[ ])?/g, '')
+        line = line.replace(/[\n]/g, '<br />')
         line = line.replace(/[ ][.][ ]/g, '')
+        line = line.replace(/^[.][ ]/g, '')
+        
         const entry = {
           author,
           title,
